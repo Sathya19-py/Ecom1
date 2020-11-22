@@ -1,0 +1,145 @@
+{% extends 'CIndex.html' %}
+{% block Customer %}
+<title>Products</title>
+{% load static %}
+<style>
+    .Farmer_Product3{float: left; width: 22%;height: 350px; background-color: whitesmoke;margin-left: 35px;border-radius: 5px;box-sizing: content-box;text-align: center;margin-top: 30px;}
+    .Farmer_Product4{float: left;width: 100%;height: 125px;}
+    .Farmer_Product4 img{width: 40%;height: 100px;margin-top: 15px;border-radius: 10px;}
+    .Farmer_Product3 button{width: 50%;height: 35px;margin-top: 5px;background-color: rgba(95, 158, 160, 0.836);outline: none;border-radius: 10px;font-family: sans-serif;font-weight: bold;}
+    .Farmer_Product5{padding-left: 30px;padding-right: 30px;text-align: justify;}
+    .Farmer_Product3:hover{box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.4);border-radius: 15px;}
+    .Farmer_Product3 button:hover{box-shadow: 2px 2px 10px rgba(39, 80, 82, 0.589);}
+</style>
+<h1>Welcome {{name}}</h1>
+<table border="2" align="center">
+    <tr>
+        <th colspan="7" >Product Details</th>
+    </tr>
+    <tr>
+        <th>Seller Email</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Weight</th>
+        <th>Image</th>
+        <th>Add to cart</th>
+    </tr>
+    {% for i in data %}
+    
+        {% if i.Quantity >= 1 %}
+            
+            <tr>
+                <form action="addc" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{i.id}}">
+                    <td>{{ i.Email }}</td>
+                    <input type="hidden" name="selleremail" value="{{ i.Email }}">
+                    <td>{{ i.Name }}</td>
+                    <input type="hidden" name="name" value="{{ i.Name }}">
+                    <td>{{ i.Price }}</td>
+                    <input type="hidden" name="price" value="{{ i.Price }}">
+                    <td>
+                        <input style="width: 30px;text-align:center;" type="number" value="1" name="quantity" required>
+                    </td>
+                    <td>{{ i.Weight }}/{{ i.Weight1 }}</td>
+                    <input type="hidden" name="weight" value="{{ i.Weight }}">
+                    <input type="hidden" name="weight1" value="{{ i.Weight1 }}">
+                    <td>
+                        <img src="{{i.PImage.url}}" width="100" height="100">
+                        <input type="hidden" type="file" name="image" value="{{i.PImage}}">
+                    </td>
+                    <td><button type="submit">Add to cart</button></td>
+                </form>
+            </tr>
+
+        {% else %}
+        
+            <tr>
+                <form action="addc" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{i.id}}">
+                    <td>{{ i.Email }}</td>
+                    <input type="hidden" name="selleremail" value="{{ i.Email }}">
+                    <td>{{ i.Name }}</td>
+                    <input type="hidden" name="name" value="{{ i.Name }}">
+                    <td>{{ i.Price }}</td>
+                    <input type="hidden" name="price" value="{{ i.Price }}">
+                    <td>
+                        <input style="width: 30px;text-align:center;" type="number" value="1" name="quantity" required>
+                    </td>
+                    <td>{{ i.Weight }}/{{ i.Weight1 }}</td>
+                    <input type="hidden" name="weight" value="{{ i.Weight }}">
+                    <input type="hidden" name="weight1" value="{{ i.Weight1 }}">
+                    <td>
+                        <img src="{{i.PImage.url}}" width="100" height="100">
+                        <input type="hidden" type="file" name="image" value="{{i.PImage}}">
+                    </td>
+                    <td>out of stock</td>
+                </form>
+            </tr>
+
+        {% endif %}
+    {% endfor %}
+</table>
+
+{% for i in data %}
+
+    {% if i.Quantity >= 1 %}
+
+        <div class="Farmer_Product3">
+            <div class="Farmer_Product4">
+                <a href="single?id={{i.id}}">
+                    <img src="{{i.PImage.url}}">
+                </a>
+            </div>
+            <p><b>Product Name:</b>{{i.Name}}</p>
+            <p><b>Price:</b>&#8377 {{i.Price}}/{{i.Weight}}{{i.Weight1}} </p>
+        
+            <form action="addc" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p><b>Quantity : </b><input style="width: 30px;text-align:center;" type="number" value="1" name="quantity" required></p>
+                <input type="hidden" name="id" value="{{i.id}}">
+                <input type="hidden" name="selleremail" value="{{ i.Email }}">
+                <input type="hidden" name="name" value="{{ i.Name }}">
+                <input type="hidden" name="price" value="{{ i.Price }}">
+                <input type="hidden" name="weight" value="{{ i.Weight }}">
+                <input type="hidden" name="weight1" value="{{ i.Weight1 }}">
+                <input type="hidden" type="file" name="image" value="{{i.PImage}}">
+            <button type="submit">Add To Cart</button>
+            </form>
+            <button type="button">Buy Now</button>
+        </div>
+
+    {% else %}
+        
+        <div class="Farmer_Product3">
+            <div class="Farmer_Product4">
+                <a href="single?id={{i.id}}">
+                    <img src="{{i.PImage.url}}">
+                </a>
+            </div>
+            <p><b>Product Name:</b>{{i.Name}}</p>
+            <p><b>Price:</b>&#8377 {{i.Price}}/{{i.Weight}}{{i.Weight1}} </p>
+        
+            <form action="addc" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p><b>Quantity : </b><input style="width: 30px;text-align:center;" type="number" value="1" name="quantity" required></p>
+                <input type="hidden" name="id" value="{{i.id}}">
+                <input type="hidden" name="selleremail" value="{{ i.Email }}">
+                <input type="hidden" name="name" value="{{ i.Name }}">
+                <input type="hidden" name="price" value="{{ i.Price }}">
+                <input type="hidden" name="weight" value="{{ i.Weight }}">
+                <input type="hidden" name="weight1" value="{{ i.Weight1 }}">
+                <input type="hidden" type="file" name="image" value="{{i.PImage}}">
+            <h2>Out of Stock</h2>
+        </div>
+
+    {% endif %}            
+{% endfor %}
+
+{% for i in messages %}
+    <h3>{{ i }}</h3>
+{% endfor %}
+
+{% endblock %}

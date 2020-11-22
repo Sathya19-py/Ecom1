@@ -1,0 +1,115 @@
+{% load static %}
+<html>
+    <head>
+        <title>Customer Cart</title>
+        <style>
+            .Cart1{margin-top: 5px; float: left;width: 100%;height: 50px;border-top: 2px solid black;border-bottom: 2px solid black;background-color: skyblue;}
+            .Cart1 h3{float: left; width: 12%;text-align: center;}
+            .Cart2{float: left;width: 100%;height: 130px;border-top: 1px solid black;border-bottom: 1px solid black;text-align: center;margin-top: 5px;}
+            .Cart2 div{float: left;width: 12%;height: 125px;text-align: center;}
+            .Cart6{float: left;width: 55%;height: 95px;margin-left: 45px;margin-top: 10px;border-radius: 15px;}
+            .Cart2 p{margin-top: 50px;}
+            .Cart3{float: left;width: 100%;height: 45px;margin-top: 5px;text-align: center;}
+            .Cart3 div{float: right;width: 15%;height: 40px;border-top: 1px solid black;border-bottom: 1px solid black;text-align: center;}
+            .Cart4{float: left;width: 100%;height: 45px;margin-top: 5px;text-align: center;}
+            .Cart4 div{float: right;width: 20%;height: 40px;text-align: center;}
+            .Cart4 div button{margin-top: 10px;}
+            .Cart5{width: 60px;height: 55px;margin-top: 35px;}
+            .input2{height: 25;width: 30px;text-align:center;margin-top: 50px;}
+            .button2{height: 25;margin-top: 50px;}
+        </style>
+    </head>
+    <body>
+        <h3>Customer Cart</h3>
+        <a href="chome">Home</a><br><br>
+        <a href="prod">Products</a><br><br>
+        <a href="">Cart</a><br><br>
+        <a href="cord">Orders</a><br><br>
+        <a href="clogout">Logout</a><br><br>
+
+        <div style="text-align: center;">
+            {% for i in messages  %}
+                <h1>{{ i }}</h1>
+            {% endfor %}
+        </div>
+        
+
+        <div class="Cart1">
+            <h3>Customer Email</h3>
+            <h3>Seller Email</h3>
+            <h3>Name</h3>
+            <h3>Price</h3>
+            <h3>Quantity</h3>
+            <h3>Add/Remove Quantity</h3>
+            <h3>Sub-Total</h3>
+            <h3>Delete</h3>
+        </div>
+        {% for c in car %}
+        <div class="Cart2">
+            <div>
+                <p>{{ c.Customer_Email }}</p>
+            </div>
+            <div>
+                <p>{{ c.Seller_Email }}</p>
+            </div>
+            <div>
+                <img class="Cart6" src="{{c.CImage.url}}">
+                <p><b>Product Name:</b>{{c.Name}}</p>
+            </div>
+            <div>
+                <p>&#8377 {{c.Price}} </p>
+            </div>
+            <div>
+                <p>{{c.Quantity}}</p>
+            </div>
+            <div>
+                {% if c.Quantity == 1 %}
+                <form action="adquanty" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ c.id }}" name="id">
+                    <input type="hidden" value="{{ c.Pro_Id }}" name="pid">
+                    <input type="hidden" value="{{c.Price}}" name="price">
+                    <input class="input2"  name="qua" type="text" value="1">
+                    <button class="button2" name="op" value="+" type="submit">+</button>
+                </form>
+                
+                {% else %}
+                <form action="adquanty" method="POST">
+                    {% csrf_token %}
+                    <button class="button2" name="op" value="-" type="submit">-</button>
+                    <input type="hidden" value="{{ c.id }}" name="id">
+                    <input type="hidden" value="{{ c.Pro_Id }}" name="pid">
+                    <input type="hidden" value="{{c.Price}}" name="price">
+                    <input class="input2"  name="qua" type="text" value="1">
+                    <button class="button2" name="op" value="+" type="submit">+</button>
+                </form>
+                {% endif %}
+                
+            </div>
+            <div>
+                <p>&#8377 {{c.Sub_Total}}</p>
+            </div>
+            <div>
+                <a href="deletecart?Id={{c.id}}">
+                    <img class="Cart5" src="{% static 'Images/Icon/garbage.png' %}">
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="Cart3" >
+            <div>
+                <p><b>Total Price : </b>&#8377 {{t}}</p>
+            </div>
+        </div>
+        <div class="Cart4">
+            <div>
+                <a href="fproduct"><button>Continue Shopping</button></a>
+                <form action="check" method="POST" >
+                    {% csrf_token %}
+                    <input type="hidden" name="Total" value="{{t}}">
+                    <button type="submit">Proceed to Checkout</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

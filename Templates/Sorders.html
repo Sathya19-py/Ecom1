@@ -1,0 +1,73 @@
+{% load static %}
+<html>
+    <head>
+        <title>Seller Orders</title>
+        <style>
+            .Order_Received1{float: left;width: 100%;height: 555px;margin-top: 2px;background-color: rgb(104, 228, 222)}
+            .Order_Received2{float: left;width: 80%;height: 400px;transform: translate(-50,-50);top: 30%;left: 10%;position: absolute;border-radius: 5px;}
+            .Order_Received2 u{font-weight: bold;font-size: x-large;text-align: center;color: rgb(43, 10, 78);}
+            .Order_Received2 table{width: 100%;border: 1px solid black;}
+            .Order_Received2 th{border: 1px solid black;width: 10%;color: rgb(80, 33, 80); font-weight: bold;font-size: large;}
+            .Order_Received2 td{border: 1px solid black;text-align: center;height: 25px;}
+            .Order_Received2 tr{height: 30px;}
+            .Order_Received2 button{background-color: green;color: white;width: 50%;}
+        </style>
+    </head>
+    <body>
+        <h3>Seller Home</h3>
+        <a href="shome">Home</a><br><br>
+        <a href="add">Add</a><br><br>
+        <a href="show">Display</a><br><br>
+        <a href="sord">Orders</a><br><br>
+        <a href="logout">Logout</a><br><br>
+
+        <div class="Order_Received1">
+            <div class="Order_Received2">
+                <table>
+                    <tr>
+                        <th colspan="10">
+                            <u>Order info</u>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>S No</th>
+                        <th>Seller Email</th>
+                        <th>Customer Email</th>
+                        <th>Product Id</th>
+                        <th>Product Image</th>
+                        <th>Product_Name</th>
+                        <th>Product_Quantity</th>
+                        <th>Total_Amount</th>
+                        <th>Order_Status</th>
+                        <th>Order Details</th>
+                        
+                        
+                    </tr>
+                    {% for i in data %}
+                        <tr>
+                            <td>{{ i.id }}</td>
+                            <td>{{ i.Seller_Email }}</td>
+                            <td>{{ i.Customer_Email }}</td>
+                            <td>{{ i.Pro_Id }}</td>
+                            <td><img src="{{i.OImage.url}}" width="60" height="60"></td>
+                            <td>{{i.Name}}</td>
+                            <td>{{i.Quantity}}</td>
+                            <td>&#8377 {{i.Sub_Total}}</td>
+                            <td>{{ i.Order_Status }}</td>
+                            <td>
+                                <form action="odetails" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ i.id }}">
+                                    <button type="submit" >Get Details</button>
+                                </form>
+                            </td>
+                        </tr>  
+                    {% endfor %}
+                </table>
+            </div>
+            {% for i in messages %}
+                <h3>{{ i }}</h3>
+            {% endfor %}
+            {{option}}
+    </body>
+</html>

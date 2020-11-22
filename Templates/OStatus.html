@@ -1,0 +1,56 @@
+{% load static %}
+<html>
+    <head>
+        <title>Order Details</title>
+        <style>
+            .single1{float: left;width: 100%;height: 600px;color: black;}
+            .single2{float: left;width: 90%;height: 550px;transform: translate(-50,-50);top: 25%;left: 5%;position: absolute;}
+            .single3{float: left;width: 35%;height: 400px;margin-left: 20px;margin-top: 20px;}
+            .single4{float: left;width: 50%;height: 400px;margin-left: 40px;margin-top: 20px;text-align: justify;}
+            .single5{float: left;width: 100%;margin-top: 15px;}
+            .single5 button{width: 25%;height: 35px;margin-left: 20px;border-radius: 10px;outline: none;}
+            .single1 img{float: left;width: 65%;height: 90%;border-radius: 15px;margin-left: 50px;}
+            .single1 p{font-size: large;}
+        </style>
+    </head>
+    <body>
+        <a href="chome">Home</a><br><br>
+        <a href="prod">Products</a><br><br>
+        <a href="cart">Cart</a><br><br>
+        <a href="cord">Orders</a><br><br>
+        <a href="clogout">Logout</a><br><br>
+
+        <div class="single1" >
+            <div class="single2">
+                {% for i in data %}
+                    <div class="single3">
+                        <h3><img src="{{i.OImage.url}}"></h3>
+                    </div>
+                    <div class="single4">
+                        <p><b> O_Product Id : </b> {{i.id}}</p>
+                        <p><b> Product Id : </b> {{i.Pro_Id}}</p>
+                        <p><b> Seller Email : </b>{{i.Seller_Email}}</p>
+                        <p><b> Order_Id : </b>{{i.Order_Id}}</p>
+                        <p><b> Product Name : </b> {{i.Name}}</p>
+                        <p><b> Price : &#8377</b> {{i.Price}} / {{i.Weight}}{{i.Weight1}}</p>
+                        <p>{{i.Description}}</p>
+                        <p><b> Quantity : </b> {{i.Quantity}}</p>
+                        <p><b> Total Amount : &#8377</b> {{i.Sub_Total}} </p>
+                        <p><b> Payment Mode : </b> {{i.Payment_Mode}}</p>
+                        <p><b> Order On : </b> {{i.Order_Date}} </p>
+                        
+                        {% if 'Delivered' == i.Order_Status %}
+                            <p><b> Order Status : </b> {{i.Order_Status}} <b>on</b> {{i.Status_Date}} </p>
+
+                        {% elif 'Order Cancelled' == i.Order_Status %}
+                            <p><b> Order Status : </b> {{i.Order_Status}} <b>on</b> {{i.Status_Date}} </p>
+                        {% else %}
+                            <p><b> Order Status : </b> {{i.Order_Status}} <b>on</b> {{i.Status_Date}} </p>
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                        {% endif %}    
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>

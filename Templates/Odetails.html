@@ -1,0 +1,149 @@
+{% load static %}
+<html>
+    <head>
+        <title>Order Details</title>
+        <style>
+            .single1{float: left;width: 100%;height: 650px;background-color: lightseagreen;color: white;}
+            .single2{float: left;width: 90%;height: 550px;transform: translate(-50,-50);top: 25%;left: 5%;position: absolute;}
+            .single3{float: left;width: 35%;height: 400px;margin-left: 20px;margin-top: 20px;}
+            .single4{float: left;width: 50%;height: 400px;margin-left: 40px;margin-top: 50px;text-align: justify;}
+            .single5{float: left;width: 100%;margin-top: 15px;}
+            .single5 button{width: 25%;height: 35px;margin-left: 20px;border-radius: 10px;outline: none;}
+            .single1 img{float: left;width: 65%;height: 90%;border-radius: 15px;margin-left: 50px;}
+        </style>
+    </head>
+    <body>
+        <a href="shome">Home</a><br><br>
+        <a href="add">Add</a><br><br>
+        <a href="show">Display</a><br><br>
+        <a href="sord">Orders</a><br><br>
+        <a href="logout">Logout</a><br><br>
+
+        <div class="single1" >
+            <div class="single2">
+                {% for i in data %}
+                    <div class="single3">
+                        <h3><img src="{{i.OImage.url}}"></h3>
+                    </div>
+                    <div class="single4">
+                        <p><b> O_Product Id : </b> {{i.id}}</p>
+                        <p><b> Product Id : </b> {{i.Pro_Id}}</p>
+                        <p><b> Customer Email : </b>{{i.Customer_Email}}</p>
+                        <p><b> Order_Id : </b>{{i.Order_Id}}</p>
+                        <p><b> Name : </b> {{i.Name}}</p>
+                        <p><b> Price : </b> {{i.Price}} / {{i.Weight}}{{i.Weight1}}</p>
+                        <p>{{i.Description}}</p>
+                        <p><b> Quantity : </b> {{i.Quantity}}</p>
+                        <p><b> Total Amount : </b> {{i.Sub_Total}} </p>
+                        <p><b> Payment Mode : </b> {{i.Payment_Mode}}</p>
+                        <p><b> Ordered On : </b> {{i.Order_Date}}</p>
+                        <p><b> Order Status : </b> {{i.Order_Status}} <b>on</b> {{i.Status_Date}} </p>
+
+                        <div class="single5">
+                            Cancel Order :
+                            {% if 'Order Cancelled' == i.Order_Status %}
+                                You cancelled the Order on {{i.Status_Date}}
+                            {% elif 'Delivered' == i.Order_Status %}
+                                -----
+                            {% else %}
+                            <form action="cancel" method="POST">
+                                {% csrf_token %}   
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <input type="hidden" name="pid" value="{{i.Pro_Id}}">
+                                <input type="hidden" name="quantity" value="{{i.Quantity}}">
+                                <button type="submit">Cancel Order</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        <div class="single5">
+                            Update Order Status:
+                            {% if 'Order Placed' == i.Order_Status %}
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                            <form action="statusupdate" method="POST">
+                                {% csrf_token %}
+                                <select name="option" style="height: 30px;width:150px">
+                                    <option value="select">--select--</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipping">Shipping</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Out For Delivery">Out For Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <button type="submit">Update</button>
+                                
+                            </form>
+
+                            {% elif 'Processing' == i.Order_Status %}
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                            <form action="statusupdate" method="POST">
+                                {% csrf_token %}
+                                <select name="option" style="height: 30px;width:150px">
+                                    <option value="select">--select--</option>
+                                    <option value="Shipping">Shipping</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Out For Delivery">Out For Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <button type="submit">Update</button>
+                            </form>
+
+                            {% elif 'Shipping' == i.Order_Status %}
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                            <form action="statusupdate" method="POST">
+                                {% csrf_token %}
+                                <select name="option" style="height: 30px;width:150px">
+                                    <option value="select">--select--</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Out For Delivery">Out For Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <button type="submit">Update</button>
+                            </form>
+
+                            {% elif 'Shipped' == i.Order_Status %}
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                            <form action="statusupdate" method="POST">
+                                {% csrf_token %}
+                                <select name="option" style="height: 30px;width:150px">
+                                    <option value="select">--select--</option>
+                                    <option value="Out For Delivery">Out For Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <button type="submit">Update</button>
+                            </form>
+
+                            {% elif 'Out For Delivery' == i.Order_Status %}
+                            <p><b> Expected Delivery Date : </b> {{Expected_Date}} </p>
+                            <form action="statusupdate" method="POST">
+                                {% csrf_token %}
+                                <select name="option" style="height: 30px;width:150px">
+                                    <option value="select">--select--</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <button type="submit">Update</button>
+                            </form>
+
+                            {% elif 'Delivered' == i.Order_Status %}
+                                <b>--------</b>
+
+                            {% elif 'Order Cancelled' == i.Order_Status %}
+                                <b>--------</b>
+                            {% endif %}
+
+                        </div>
+                        <div class="single5">
+                            {% for mes in messages %}
+                                <h3>{{mes}}</h3>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>

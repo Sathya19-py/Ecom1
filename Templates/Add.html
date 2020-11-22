@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Add</title>
+    </head>
+    <body>
+        <h3>Add</h3>
+        <a href="shome">Home</a><br><br>
+        <a href="">Add</a><br><br>
+        <a href="show">Display</a><br><br>
+        <a href="sord">Orders</a><br><br>
+        <a href="logout">Logout</a><br><br>
+
+        <form action="adding" method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <table border='2' align="center">
+                <tr>
+                    <th>Adding Product</th>
+                </tr>
+                <tr>
+                    <td align="center" >
+                        Name : <input type="text" placeholder="Product Name" required name="name">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        Price : <input type="number" placeholder="Product Price" required name="price">
+                    </td>  
+                </tr>
+                <tr>
+                    <td align="center">
+                        Quantity : <input type="number" placeholder="Product Quantity" required name="quantity">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        Weight : <input type="number" placeholder="Product Weight" required name="weight">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        Weight1 : <input type="text" placeholder="Product Weight In" required name="weight1">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        Product Image : <input type="file" placeholder="Enter Product Name" name="image" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <button type="submit">Add</button>
+                    </td>
+                </tr>
+            </table>    
+        </form>
+        {% for i in messages %}
+            <h3>{{ i }}</h3>
+        {% endfor %}
+    </body>
+</html>
