@@ -26,8 +26,9 @@
         <th>Add to cart</th>
     </tr>
     {% for i in data %}
+    {{ i.Quantity }}
     
-        {% if i.Quantity >= 1 %}
+        {% if i.Quantity == 0 %}
             
             <tr>
                 <form action="addc" method="POST">
@@ -49,7 +50,7 @@
                         <img src="{{i.PImage.url}}" width="100" height="100">
                         <input type="hidden" type="file" name="image" value="{{i.PImage}}">
                     </td>
-                    <td><button type="submit">Add to cart</button></td>
+                    <td>out of stock</td>
                 </form>
             </tr>
 
@@ -75,7 +76,8 @@
                         <img src="{{i.PImage.url}}" width="100" height="100">
                         <input type="hidden" type="file" name="image" value="{{i.PImage}}">
                     </td>
-                    <td>out of stock</td>
+                    
+                    <td><button type="submit">Add to cart</button></td>
                 </form>
             </tr>
 

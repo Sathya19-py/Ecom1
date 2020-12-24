@@ -90,7 +90,14 @@
                 <p>&#8377 {{c.Sub_Total}}</p>
             </div>
             <div>
-                <a href="deletecart?Id={{c.id}}">
+                <form action="deletecart" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ c.Pro_Id }}" name="pid">
+                    <input type="hidden" value="{{ c.id }}" name="Id">
+                    <input type="hidden" value="{{c.Quantity}}" name="qua">
+                    <button type="submit">Delete</button>
+                </form>
+                <a href="deletecart?Id={{c.id}},qua={{c.Quantity}}">
                     <img class="Cart5" src="{% static 'Images/Icon/garbage.png' %}">
                 </a>
             </div>

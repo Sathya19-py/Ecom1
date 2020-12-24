@@ -122,11 +122,16 @@ def Adding_Cart(request):
                     #messages.info(request,'Quantity Not Available')
                     #return redirect('prod')
                 else:
-                    Cart(Customer_Email=Customer_Email,Seller_Email=Seller_Email,Pro_Id=p_no,Name=Name,
-                        Price=Price,Weight=Weight,Weight1=Weight1,CImage=CImage,Quantity=Quantity,
-                        Sub_Total=Sub_Total).save()
-                    res = Product.objects.all()
-                    return render(request,"Products.html",{"data":res})
+                    res = Product.objects.filter(id=p_no)
+                    for i in res:
+                        qua = i.Quantity
+                        q1  = qua - Quantity
+                        Product.objects.filter(id=p_no).update(Quantity=q1)
+                        Cart(Customer_Email=Customer_Email,Seller_Email=Seller_Email,Pro_Id=p_no,Name=Name,
+                            Price=Price,Weight=Weight,Weight1=Weight1,CImage=CImage,Quantity=Quantity,
+                            Sub_Total=Sub_Total).save()
+                        res = Product.objects.all()
+                        return render(request,"Products.html",{"data":res})
 
     else:
         res = Product.objects.filter(Name=Name)
@@ -141,11 +146,16 @@ def Adding_Cart(request):
                 #messages.info(request,'Quantity Not Availabel')
                 #return redirect('prod')
             else:
-                Cart(Customer_Email=Customer_Email,Seller_Email=Seller_Email,Pro_Id=p_no,Name=Name,
+                res = Product.objects.filter(id=p_no)
+                for i in res:
+                    qua = i.Quantity
+                    q1  = qua - Quantity
+                    Product.objects.filter(id=p_no).update(Quantity=q1)
+                    Cart(Customer_Email=Customer_Email,Seller_Email=Seller_Email,Pro_Id=p_no,Name=Name,
                         Price=Price,Weight=Weight,Weight1=Weight1,CImage=CImage,Quantity=Quantity,
                         Sub_Total=Sub_Total).save()
-                res = Product.objects.all()
-                return render(request,"Products.html",{"data":res})
+                    res = Product.objects.all()
+                    return render(request,"Products.html",{"data":res})
 
 
 def Show_Cart(request):
@@ -190,20 +200,32 @@ def Add_Delete(request):
                     Sub_Total = p + int(Price)
                     print(Quantity)
                     print(Sub_Total)
+
+                    q3 = q2 - q
+
+                    Product.objects.filter(id=Pid).update(Quantity=q3)
+
                     Cart.objects.filter(id=cid).update(Quantity=Quantity,Sub_Total=Sub_Total)
                     return redirect('cart')
 
     else:
-        res = Cart.objects.filter(id=cid)
-        for i in res:
-            q1 = int(i.Quantity)
-            p = int(i.Sub_Total)
-            Quantity = q1 - q
-            Sub_Total = p - int(Price)
-            print(Quantity)
-            print(Sub_Total)
-            Cart.objects.filter(id=cid).update(Quantity=Quantity,Sub_Total=Sub_Total)
-            return redirect('cart')
+        r = Product.objects.filter(id=Pid)
+        for x in r:
+            q2 = x.Quantity
+            res = Cart.objects.filter(id=cid)
+            for i in res:
+                q1 = int(i.Quantity)
+                p = int(i.Sub_Total)
+                Quantity = q1 - q
+                Sub_Total = p - int(Price)
+                print(Quantity)
+                print(Sub_Total)
+
+                q3 = q2 + q
+                Product.objects.filter(id=Pid).update(Quantity=q3)
+
+                Cart.objects.filter(id=cid).update(Quantity=Quantity,Sub_Total=Sub_Total)
+                return redirect('cart')
 
 def Corders(request):
     Customer_Email = request.session['user']
@@ -358,10 +380,18 @@ def Order_Details(request):
     return render(request,'OStatus.html',{'data':res,'Expected_Date':Expected_Date})
 
 def Delete_Cart(request):
-    Cid  = request.GET['Id']
+    Cid  = request.POST.get('Id')
+    Pid = request.POST.get('pid')
+    q = int(request.POST.get('qua'))
     print(Cid)
-    Cart.objects.filter(id=Cid).delete()
-    return redirect('cart')
+    r = Product.objects.filter(id=Pid)
+    for x in r:
+        q2 = x.Quantity
+        q3 = q2 + q
+        Product.objects.filter(id=Pid).update(Quantity=q3)
+        Cart.objects.filter(id=Cid).delete()
+        return redirect('cart')
+    
 
 
 def Clogout(request):
